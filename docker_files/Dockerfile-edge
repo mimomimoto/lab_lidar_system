@@ -1,0 +1,76 @@
+FROM nvcr.io/nvidia/pytorch:23.03-py3
+SHELL ["/bin/bash", "-c"]
+RUN apt-get update -y \
+    && apt-get upgrade -y \
+    && apt-get install -y iputils-ping net-tools \
+    && apt-get install -y vim \
+    && apt-get install -y sudo \
+    && sudo apt install -y curl \
+    && sudo apt install -y gnupg \
+    && sudo apt install -y git \
+    && sudo apt-get install -y lsb-release \
+    && sudo apt install -y python3-pip \
+    && python3 -m pip install --upgrade pip \
+    && sudo apt-get install -y libx11-dev \
+    && sudo apt-get install -y libgl1-mesa-glx
+
+RUN mkdir ws
+WORKDIR /ws
+RUN git clone https://github.com/Livox-SDK/Livox-SDK.git
+WORKDIR Livox-SDK/build
+RUN cmake .. \
+    && make \
+    && sudo make install
+
+WORKDIR /ws
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TERM=xterm
+ENV LANGUAGE=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+
+RUN apt-get update && apt-get install -y keyboard-configuration && \
+    echo 'keyboard-configuration keyboard-configuration/layoutcode string us' | debconf-set-selections && \
+    echo 'keyboard-configuration keyboard-configuration/xkb-keymap select us' | debconf-set-selections
+
+RUN apt-get install -y tzdata && \
+    ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
+
+RUN sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list' \
+    && curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - \
+    && sudo apt update \
+    && DEBIAN_FRONTEND=noninteractive sudo apt install ros-noetic-desktop-full -y -f \
+    && sudo apt install ros-noetic-catkin -y \
+    && echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc \
+    && source ~/.bashrc \
+    && sudo apt update \
+    && sudo apt install python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential -y \
+    && sudo rosdep init \
+    && rosdep update
+
+WORKDIR /ws
+RUN git clone https://github.com/Livox-SDK/livox_ros_driver.git ws_livox/src
+RUN cd /ws/ws_livox && /bin/bash -c "source /opt/ros/noetic/setup.sh; catkin_make"
+WORKDIR /ws/ws_livox/devel/
+RUN source setup.sh \
+    && sudo apt install ros-noetic-ros-numpy \
+    && echo "source /ws/ws_livox/devel/setup.bash" >> ~/.bashrc \
+    && source ~/.bashrc
+WORKDIR /ws/ws_livox/src/
+RUN catkin_create_pkg --rosdistro noetic lidar_subscriber std_msgs rospy roscpp
+RUN cd /ws/ws_livox && /bin/bash -c "source /opt/ros/noetic/setup.sh; catkin_make"
+WORKDIR /ws/ws_livox/src/lidar_subscriber
+RUN mkdir scripts
+WORKDIR /ws/ws_livox/src/lidar_subscriber/scripts
+RUN touch lidar_sub.py \
+    && sudo chmod +x /ws/ws_livox/src/lidar_subscriber/scripts/lidar_sub.py
+
+RUN echo 'export LD_LIBRARY_PATH=/opt/hpcx/ompi/lib:$LD_LIBRARY_PATH' >> ~/.bashrc \
+    && source ~/.bashrc
+    
+RUN sudo apt remove python3-blinker -y \
+    &&  pip install open3d
+
+RUN mkdir -p /ws/lidar_data

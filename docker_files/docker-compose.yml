@@ -1,0 +1,22 @@
+version: "2.0"
+services:
+  lidar-edge:
+    image: lidar-edge
+    container_name: lidar-edge
+    network_mode: "host"
+    volumes:
+      - type: bind
+        source: /home/infolab/Desktop/lab_lidar_system/lidar_edge
+        target: /ws/ws_livox/src/lidar_subscriber/scripts
+      - type: bind
+        source: /home/infolab/Desktop/lab_lidar_system/lidar_setting/lidar_launch
+        target: /ws/ws_livox/src/livox_ros_driver/launch/
+      - type: bind
+        source: /home/infolab/Desktop/lab_lidar_system/lidar_setting/lidar_config
+        target: /ws/ws_livox/src/livox_ros_driver/config
+      - type: bind
+        source: /home/infolab/Desktop/lab_lidar_system/lidar_setting/lidar_data
+        target: /ws/lidar_data
+    # command: sudo chmod +x /ws/ws_livox/src/lidar_subscriber/scripts/lidar_sub.py
+
+    runtime: nvidia
