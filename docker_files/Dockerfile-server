@@ -1,0 +1,21 @@
+FROM nvcr.io/nvidia/pytorch:23.03-py3
+SHELL ["/bin/bash", "-c"]
+
+RUN mkdir -p /ws/lidar_data
+RUN mkdir -p /ws/lidar_server
+
+RUN apt-get update -y \
+    && apt-get upgrade -y \
+    && apt-get install -y iputils-ping net-tools \
+    && apt-get install -y vim \
+    && apt-get install -y sudo \
+    && sudo apt install -y curl \
+    && sudo apt install -y gnupg \
+    && sudo apt-get install -y lsb-release \
+    && apt install -y python3-pip \
+    && python3 -m pip install --upgrade pip \
+    && apt-get upgrade \
+    && sudo apt-get install -y libx11-dev \
+    && sudo apt-get install -y libgl1-mesa-glx
+
+RUN pip install open3d uvicorn fastapi websockets tsfresh

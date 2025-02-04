@@ -74,3 +74,4 @@ RUN sudo apt remove python3-blinker -y \
     &&  pip install open3d
 
 RUN mkdir -p /ws/lidar_data
+RUN mkdir -p /ws/lidar_tuning

@@ -176,7 +176,7 @@ def callback(point_cloud, args):
     
     # 回転行列を含むJSONファイルの読み取り
     config = {}
-    with open("/work_space/lidar_data/matrix_config/matrix_config.json", mode="r") as f:
+    with open("/ws/lidar_data/matrix_config.json", mode="r") as f:
             config = json.load(f)
     
     # 計測時の時間を取得

@@ -17,6 +17,24 @@ services:
       - type: bind
         source: /home/infolab/Desktop/lab_lidar_system/lidar_setting/lidar_data
         target: /ws/lidar_data
+      - type: bind
+        source: /home/infolab/Desktop/lab_lidar_system/lidar_tuning
+        target: /ws/lidar_tuning
+    # command: sudo chmod +x /ws/ws_livox/src/lidar_subscriber/scripts/lidar_sub.py
+
+    runtime: nvidia
+
+  lidar-server:
+    image: lidar-server
+    container_name: lidar-server
+    network_mode: "host"
+    volumes:
+      - type: bind
+        source: /home/infolab/Desktop/lab_lidar_system/lidar_server
+        target: /ws/lidar_server
+      - type: bind
+        source: /home/infolab/Desktop/lab_lidar_system/lidar_setting/lidar_data
+        target: /ws/lidar_data
     # command: sudo chmod +x /ws/ws_livox/src/lidar_subscriber/scripts/lidar_sub.py
 
     runtime: nvidia
