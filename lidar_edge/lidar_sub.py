@@ -160,7 +160,7 @@ def cluster(pcd_numpy):
     
     cluster_time = time.time() - ut
     
-    # o3d.io.write_point_cloud(f"/work_space/lidar_data/eva/reid/5/{datetime.datetime.now() + datetime.timedelta(hours=9)}.pcd", cluster_pcd)
+    # o3d.io.write_point_cloud(f"/ws/lidar_data/eva/reid/5/{datetime.datetime.now() + datetime.timedelta(hours=9)}.pcd", cluster_pcd)
 
     return pcd_arrays, back_substruction_time, cluster_time, len(pcd_arrays)
 
@@ -217,10 +217,10 @@ def callback(point_cloud, args):
     
     
     
-    for file in glob.glob("/work_space/lidar_data/" + code + "/*.pcd", recursive=True):
+    for file in glob.glob("/ws/lidar_data/" + code + "/*.pcd", recursive=True):
         os.remove(file)
 
-    o3d.t.io.write_point_cloud("/work_space/lidar_data/" + code + "/" + dt_now_str + ".pcd", pcd)
+    o3d.t.io.write_point_cloud("/ws/lidar_data/" + code + "/" + dt_now_str + ".pcd", pcd)
     # print("save " + code + " data")
 
     
@@ -243,7 +243,7 @@ def combine_pcd(q_3JEDKBS001G9601, q_3JEDKC50014U011, q_3JEDL3N0015X621, q_3JEDL
     
 
     # Server URL for HTTP POST requests
-    server_url = "http://192.168.100.120:49221/recv_data"  # Replace with your server's IP and port
+    server_url = "http://192.168.50.32:49221/recv_data"  # Replace with your server's IP and port
 
     send_data_time = time.time()
     band_width = 0
@@ -300,7 +300,7 @@ def combine_pcd(q_3JEDKBS001G9601, q_3JEDKC50014U011, q_3JEDL3N0015X621, q_3JEDL
         # Save the point cloud at a specific time (optional)
         now_dt = datetime.datetime.now()
         if 18 == now_dt.hour and 0 < now_dt.minute < 5:
-            o3d.t.io.write_point_cloud("/work_space/lidar_data/base/base.pcd", combined_voxel_pcd)
+            o3d.t.io.write_point_cloud("/ws/lidar_data/base/base.pcd", combined_voxel_pcd)
 
         combined_voxel_numpy = combined_voxel_pcd.point.positions.cpu().numpy().copy()
         data_to_send = {
@@ -388,7 +388,7 @@ def combine_pcd(q_3JEDKBS001G9601, q_3JEDKC50014U011, q_3JEDL3N0015X621, q_3JEDL
                 if (back_substruction_coefficient - 1)*server_back_substruction_time + (cluster_coefficient - 1)*server_cluster_time < ((before_data_len + server_cluster_size) * 8 / band_width):
                     SERVER_FLAG = False
 
-            # with open('/work_space/lidar_data/process_change.csv', 'a') as f:
+            # with open('/ws/lidar_data/process_change.csv', 'a') as f:
             #     writer = csv.writer(f)
             #     writer.writerow([
             #         datetime.datetime.now() + datetime.timedelta(hours=9),
@@ -446,19 +446,19 @@ def combine_pcd(q_3JEDKBS001G9601, q_3JEDKC50014U011, q_3JEDL3N0015X621, q_3JEDL
                 if (back_substruction_coefficient - 1)*back_substruction_time/back_substruction_coefficient + (cluster_coefficient - 1)*cluster_time/cluster_coefficient > ((before_data_len + after_data_len) * 8 / band_width):
                     SERVER_FLAG = True
 
-        with open('/work_space/lidar_data/process_change.csv', 'a') as f:
-            writer = csv.writer(f)
-            writer.writerow([
-                datetime.datetime.now() + datetime.timedelta(hours=9),
-                band_width,
-                flag,
-                back_substruction_coefficient,
-                cluster_coefficient
-            ])
+        # with open('/ws/lidar_data/process_change.csv', 'a') as f:
+        #     writer = csv.writer(f)
+        #     writer.writerow([
+        #         datetime.datetime.now() + datetime.timedelta(hours=9),
+        #         band_width,
+        #         flag,
+        #         back_substruction_coefficient,
+        #         cluster_coefficient
+        #     ])
 
         send_data_time = time.time()
 
-        o3d.t.io.write_point_cloud("/work_space/lidar_data/combined_pcd/combined.pcd", combined_voxel_pcd)
+        o3d.t.io.write_point_cloud("/ws/lidar_data/combined_pcd/combined.pcd", combined_voxel_pcd)
         print("save combined data")
 
         
@@ -486,7 +486,7 @@ def share_processing_time_server(q_server_back_substruction_time, q_server_clust
             print(f"Error processing data: {e}")
             return 'Error', 500
 
-    app.run(host='192.168.100.195', port=49228)  # Adjust port if necessary
+    app.run(host='192.168.50.32', port=49228)  # Adjust port if necessary
         
 
 def main():

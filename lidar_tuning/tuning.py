@@ -235,59 +235,59 @@ def main():
     threshold = 0.01
     
     
-    # 1
-    source_path = glob.glob("/ws/lidar_data/3JEDKBS001G9601/**.pcd")[0]
-    base_path = "combine_data/combine_3JEDL76001L4201.pcd"
-    inlier_cloud, target, inlier_cloud_down, target_down, inlier_cloud_fpfh, target_fpfh = prepare_dataset_remove_outlier(source_path, base_path, rough_voxel_size, 1)
-    result_ransac = execute_global_registration(inlier_cloud_down, target_down,
-                                    inlier_cloud_fpfh, target_fpfh,
-                                    rough_voxel_size)
-    source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(source_path, base_path, precision_voxel_size)
-    result_icp = execute_icp_registration(source_down, target_down, threshold, result_ransac.transformation)
-    print(result_icp)
-    source.transform(result_icp.transformation)
-    target.paint_uniform_color([0, 1, 0])
-    source.paint_uniform_color([1, 0, 0])
-    pcd = source + target
+    # # 1
+    # source_path = glob.glob("/ws/lidar_data/3JEDKBS001G9601/**.pcd")[0]
+    # base_path = "combine_data/combine_3JEDKBS001G9601.pcd"
+    # inlier_cloud, target, inlier_cloud_down, target_down, inlier_cloud_fpfh, target_fpfh = prepare_dataset_remove_outlier(source_path, base_path, rough_voxel_size, 1)
+    # result_ransac = execute_global_registration(inlier_cloud_down, target_down,
+    #                                 inlier_cloud_fpfh, target_fpfh,
+    #                                 rough_voxel_size)
+    # source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(source_path, base_path, precision_voxel_size)
+    # result_icp = execute_icp_registration(source_down, target_down, threshold, result_ransac.transformation)
+    # print(result_icp)
+    # source.transform(result_icp.transformation)
+    # target.paint_uniform_color([0, 1, 0])
+    # source.paint_uniform_color([1, 0, 0])
+    # pcd = source + target
     # o3d.io.write_point_cloud('new_3JEDKBS001G9601.pcd', pcd)
-    print(result_icp.transformation.tolist())
-    config['3JEDKBS001G9601'] = result_icp.transformation.tolist()
+    # print(result_icp.transformation.tolist())
+    # config['3JEDKBS001G9601'] = result_icp.transformation.tolist()
     
-    # 2
-    source_path = glob.glob("/ws/lidar_data/3JEDKC50014U011/*.pcd")[0]
-    base_path = "combine_data/combine_3JEDKC50014U011.pcd"
-    inlier_cloud, target, inlier_cloud_down, target_down, inlier_cloud_fpfh, target_fpfh = prepare_dataset_remove_outlier(source_path, base_path, rough_voxel_size, 0)
-    result_ransac = execute_global_registration(inlier_cloud_down, target_down,
-                                    inlier_cloud_fpfh, target_fpfh,
-                                    rough_voxel_size)
-    source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(source_path, base_path, precision_voxel_size)
-    result_icp = execute_icp_registration(source_down, target_down, threshold, result_ransac.transformation)
-    print(result_icp)
-    source.transform(result_icp.transformation)
-    pcd = source + target
+    # # 2
+    # source_path = glob.glob("/ws/lidar_data/3JEDKC50014U011/*.pcd")[0]
+    # base_path = "combine_data/combine_3JEDKC50014U011.pcd"
+    # inlier_cloud, target, inlier_cloud_down, target_down, inlier_cloud_fpfh, target_fpfh = prepare_dataset_remove_outlier(source_path, base_path, rough_voxel_size, 0)
+    # result_ransac = execute_global_registration(inlier_cloud_down, target_down,
+    #                                 inlier_cloud_fpfh, target_fpfh,
+    #                                 rough_voxel_size)
+    # source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(source_path, base_path, precision_voxel_size)
+    # result_icp = execute_icp_registration(source_down, target_down, threshold, result_ransac.transformation)
+    # print(result_icp)
+    # source.transform(result_icp.transformation)
+    # pcd = source + target
     # o3d.io.write_point_cloud('new_3JEDKC50014U011.pcd', pcd)
-    print(result_icp.transformation.tolist())
-    config['3JEDKC50014U011'] = result_icp.transformation.tolist()
+    # print(result_icp.transformation.tolist())
+    # config['3JEDKC50014U011'] = result_icp.transformation.tolist()
     
-    # 3
-    source_path = glob.glob("/ws/lidar_data/3JEDL3N0015X621/*.pcd")[0]
-    base_path = "combine_data/combine_3JEDL3N0015X621.pcd"
-    inlier_cloud, target, inlier_cloud_down, target_down, inlier_cloud_fpfh, target_fpfh = prepare_dataset_remove_outlier(source_path, base_path, rough_voxel_size, 0)
-    result_ransac = execute_global_registration(inlier_cloud_down, target_down,
-                                    inlier_cloud_fpfh, target_fpfh,
-                                    rough_voxel_size)
-    source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(source_path, base_path, precision_voxel_size)
-    result_icp = execute_icp_registration(source_down, target_down, threshold, result_ransac.transformation)
-    print(result_icp)
-    source.transform(result_icp.transformation)
-    pcd = source + target
+    # # 3
+    # source_path = glob.glob("/ws/lidar_data/3JEDL3N0015X621/*.pcd")[0]
+    # base_path = "combine_data/combine_3JEDL3N0015X621.pcd"
+    # inlier_cloud, target, inlier_cloud_down, target_down, inlier_cloud_fpfh, target_fpfh = prepare_dataset_remove_outlier(source_path, base_path, rough_voxel_size, 0)
+    # result_ransac = execute_global_registration(inlier_cloud_down, target_down,
+    #                                 inlier_cloud_fpfh, target_fpfh,
+    #                                 rough_voxel_size)
+    # source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(source_path, base_path, precision_voxel_size)
+    # result_icp = execute_icp_registration(source_down, target_down, threshold, result_ransac.transformation)
+    # print(result_icp)
+    # source.transform(result_icp.transformation)
+    # pcd = source + target
     # o3d.io.write_point_cloud('new_3JEDL3N0015X621.pcd', pcd)
-    print(result_icp.transformation.tolist())
-    config['3JEDL3N0015X621'] = result_icp.transformation.tolist()
+    # print(result_icp.transformation.tolist())
+    # config['3JEDL3N0015X621'] = result_icp.transformation.tolist()
     
     # 4
     source_path = glob.glob("/ws/lidar_data/3JEDL76001L4201/*.pcd")[0]
-    base_path = "combine_data/combine_3JEDKBS001G9601.pcd"
+    base_path = "combine_data/combine_3JEDL76001L4201.pcd"
     inlier_cloud, target, inlier_cloud_down, target_down, inlier_cloud_fpfh, target_fpfh = prepare_dataset_remove_outlier(source_path, base_path, rough_voxel_size, 0)
     result_ransac = execute_global_registration(inlier_cloud_down, target_down,
                                     inlier_cloud_fpfh, target_fpfh,
@@ -297,7 +297,7 @@ def main():
     print(result_icp)
     source.transform(result_icp.transformation)
     pcd = source + target
-    # o3d.io.write_point_cloud('new_3JEDL76001L4201.pcd', pcd)
+    o3d.io.write_point_cloud('new_3JEDL76001L4201.pcd', pcd)
     print(result_icp.transformation.tolist())
     config['3JEDL76001L4201'] = result_icp.transformation.tolist()
     

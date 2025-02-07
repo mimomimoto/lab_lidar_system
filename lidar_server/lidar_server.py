@@ -232,23 +232,15 @@ def first_regist(pcd_arrays, feature_arrays, now_time):
         pcd.points = o3d.utility.Vector3dVector(pcd_arrays[i])
         pcd.paint_uniform_color(color_list[index1.index(id)])
         cluster_pcd += pcd
-        # with open('/workspace/ws/lidar_server/opencampus_id_data.csv', 'a') as f:
-        #     writer = csv.writer(f)
-        #     writer.writerow([now_time, id, x, y, z])
     return cluster_pcd
 
 def match_id(df):
-    # print(df)
-    # try:
     min_value = df.min().min()
     min_column = df.min().idxmin()
     min_row = df[min_column].idxmin()
     if min_value <= 1:
         df = df.drop(index=min_row, columns=min_column)
     return min_value, min_row, min_column, df
-    # except:
-    #     return 0, 0, 0, df
-
 
 def normal_regist(pcd_arrays, feature_arrays, now_time):
     global gallary_df
@@ -360,10 +352,7 @@ def normal_regist(pcd_arrays, feature_arrays, now_time):
                 pcd.points = o3d.utility.Vector3dVector(pcd_arrays[i])
                 pcd.paint_uniform_color([0, 0, 0])
                 cluster_pcd += pcd
-                # with open('/workspace/ws/lidar_server/opencampus_id_data.csv', 'a') as f:
-                #     writer = csv.writer(f)
-                #     writer.writerow([now_time, id, x, y, z])
-        
+
         diffuse_gallary_id_list = objective_df.columns.values
         
         for i in diffuse_gallary_id_list:
@@ -499,8 +488,6 @@ def cluster(pcd_numpy):
                         cluster_pcd += pcd
     
     cluster_time = time.time() - ut
-    
-    # o3d.io.write_point_cloud(f"/work_space/lidar_data/eva/reid/5/{datetime.datetime.now() + datetime.timedelta(hours=9)}.pcd", cluster_pcd)
 
     return pcd_arrays, back_substruction_time, cluster_time, len(pcd_arrays)
     
@@ -532,7 +519,7 @@ def sub_back(pcd_numpy, now_time, flag, back_substruction_time, cluster_time, da
     }
     try:
         response = requests.post(
-            'http://192.168.107.50:49228/processing_time',  # Replace with your server's IP and endpoint
+            'http://192.168.50.32:49228/processing_time',  # Replace with your server's IP and endpoint
             data=data,
             headers=headers
         )
@@ -574,11 +561,7 @@ def sub_back(pcd_numpy, now_time, flag, back_substruction_time, cluster_time, da
     pcd_color = np.asarray(new_p_pcd.colors, dtype='float32')
     colors_np = np.asarray(pcd_color * 255, dtype='uint8')
     colors = colors_np.tobytes("C")
-    
-    # with open('/workspace/ws/lidar_server/new_server_process_11_13_s.csv', 'a') as f:
-    #         writer = csv.writer(f)
-    #         writer.writerow([datetime.datetime.now() + datetime.timedelta(hours=9), mbps, flag, back_substruction_time, cluster_time, extract_time, regist_time, process_time])
-   
+
     return points, colors
 
 class VizClient(object):
@@ -592,9 +575,6 @@ class VizClient(object):
         ut = time.time()
         now_time = datetime.datetime.now() + datetime.timedelta(hours=9)
         points, colors = sub_back(pcd_numpy, now_time, flag, back_substruction_time, cluster_time, data_size, mbps, process_time)
-        # with open('/workspace/ws/lidar_server/server_process.csv', 'a') as f:
-        #         writer = csv.writer(f)
-        #         writer.writerow([datetime.datetime.now() + datetime.timedelta(hours=9), len(pcd_numpy), time.time() - ut])
         print("************************************************")
         print("cloud: ", time.time() - ut)
         print("************************************************")
@@ -604,7 +584,7 @@ class VizClient(object):
             urllib.parse.urljoin(self._url, "pointcloud/store"),
             json={"name": name, "points": self._encode(points), "colors": self._encode(colors)},
         )
-        # print(type(points))
+
         return response
 
 def put_dummy_on_cuda():
@@ -669,10 +649,8 @@ def create_flask_app():
     def recv_data():
         ut = time.time()
         try:
-            # Assume 'Flag' is sent as a header
             flag = int(request.headers.get('Flag', 0))
 
-            # Read the pickled data from the request body
             data = request.data
             
             data_received = pickle.loads(data)
@@ -684,7 +662,6 @@ def create_flask_app():
             
             process_time = time.time() - ut
 
-            # Calculate data size and throughput
             data_size = data_len / (1024 * 1024)
             print('data_size: ', data_size)
             total_bits = data_len * 8
