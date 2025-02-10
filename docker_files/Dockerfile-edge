@@ -73,5 +73,12 @@ RUN echo 'export LD_LIBRARY_PATH=/opt/hpcx/ompi/lib:$LD_LIBRARY_PATH' >> ~/.bash
 RUN sudo apt remove python3-blinker -y \
     &&  pip install open3d
 
+RUN sudo apt-get install screen -y
+
 RUN mkdir -p /ws/lidar_data
 RUN mkdir -p /ws/lidar_tuning
+
+
+ENV PATH="${PATH}:/opt/hpcx/ompi/bin"
+ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/hpcx/ompi/lib"
+RUN sudo apt install libopenmpi-dev -y

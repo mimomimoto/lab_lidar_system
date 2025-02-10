@@ -19,3 +19,5 @@ RUN apt-get update -y \
     && sudo apt-get install -y libgl1-mesa-glx
 
 RUN pip install open3d uvicorn fastapi websockets tsfresh
+
+RUN sudo apt-get install screen -y

@@ -20,7 +20,10 @@ services:
       - type: bind
         source: /home/infolab/Desktop/lab_lidar_system/lidar_tuning
         target: /ws/lidar_tuning
-    # command: sudo chmod +x /ws/ws_livox/src/lidar_subscriber/scripts/lidar_sub.py
+    command: 
+      - /bin/bash
+      - -c
+      - 'source /opt/ros/noetic/setup.bash && source /ws/ws_livox/devel/setup.bash && sudo chmod +x /ws/ws_livox/src/lidar_subscriber/scripts/lidar_sub.py && roslaunch livox_ros_driver livox_lidar.launch --screen'
 
     runtime: nvidia
 
@@ -35,6 +38,9 @@ services:
       - type: bind
         source: /home/infolab/Desktop/lab_lidar_system/lidar_setting/lidar_data
         target: /ws/lidar_data
-    # command: sudo chmod +x /ws/ws_livox/src/lidar_subscriber/scripts/lidar_sub.py
+    command: 
+      - /bin/bash
+      - -c
+      - 'cd /ws/lidar_server/web_app && uvicorn web_server:app --host 192.168.50.32 --port 8000 --reload & cd /ws/lidar_server && screen python lidar_server.py'
 
     runtime: nvidia
