@@ -18,6 +18,7 @@ import pandas as pd
 from flask import Flask, request
 import requests
 from statistics import mean
+import queue
 
 # lab
 ROUGH_DBSCAN_EPS = 0.1
@@ -286,10 +287,13 @@ def combine_pcd(q_3JEDKBS001G9601, q_3JEDKC50014U011, q_3JEDL3N0015X621, q_3JEDL
         # print('band_width: ', band_width)
 
         # Get point cloud data from queues
-        pcd_3JEDKBS001G9601 = q_3JEDKBS001G9601.get()
-        pcd_3JEDKC50014U011 = q_3JEDKC50014U011.get()
-        pcd_3JEDL3N0015X621 = q_3JEDL3N0015X621.get()
-        pcd_3JEDL76001L4201 = q_3JEDL76001L4201.get()
+        try:
+            pcd_3JEDKBS001G9601 = q_3JEDKBS001G9601.get(timeout=10)
+            pcd_3JEDKC50014U011 = q_3JEDKC50014U011.get(timeout=10)
+            pcd_3JEDL3N0015X621 = q_3JEDL3N0015X621.get(timeout=10)
+            pcd_3JEDL76001L4201 = q_3JEDL76001L4201.get(timeout=10)
+        except queue.Empty:
+            os.system('kill 1')
 
         ut = time.time()
 

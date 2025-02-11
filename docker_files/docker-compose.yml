@@ -4,6 +4,7 @@ services:
     image: lidar-edge
     container_name: lidar-edge
     network_mode: "host"
+    restart: always
     volumes:
       - type: bind
         source: /home/infolab/Desktop/lab_lidar_system/lidar_edge
@@ -31,6 +32,7 @@ services:
     image: lidar-server
     container_name: lidar-server
     network_mode: "host"
+    restart: always
     volumes:
       - type: bind
         source: /home/infolab/Desktop/lab_lidar_system/lidar_server
@@ -41,6 +43,6 @@ services:
     command: 
       - /bin/bash
       - -c
-      - 'cd /ws/lidar_server/web_app && uvicorn web_server:app --host 192.168.50.32 --port 8000 --reload & cd /ws/lidar_server && screen python lidar_server.py'
+      - 'cd /ws/lidar_server/web_app && uvicorn web_server:app --host 192.168.50.32 --port 8000 --reload & cd /ws/lidar_server && python lidar_server.py'
 
     runtime: nvidia
