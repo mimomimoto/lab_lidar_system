@@ -46,3 +46,20 @@ services:
       - 'cd /ws/lidar_server/web_app && uvicorn web_server:app --host 192.168.50.32 --port 8000 --reload & cd /ws/lidar_server && python lidar_server.py'
 
     runtime: nvidia
+  
+  lidar-tuning:
+    image: lidar-server
+    container_name: lidar-tuning
+    network_mode: "host"
+    restart: always
+    volumes:
+      - type: bind
+        source: /home/infolab/Desktop/lab_lidar_system/lidar_tuning
+        target: /ws/lidar_tuning
+      - type: bind
+        source: /home/infolab/Desktop/lab_lidar_system/lidar_setting/lidar_data
+        target: /ws/lidar_data
+    command: 
+      - /bin/bash
+      - -c
+      - 'python /ws/lidar_tuning/tuning.py && sleep 36000'
